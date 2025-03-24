@@ -8,8 +8,11 @@ version '3.0.0'
 
 dependency 'qb-core'
 
+lua54 'yes'
+
 shared_scripts {
     'Shared/Config.lua',
+    '@ox_lib/init.lua',
     'Shared/Utils.lua'
 }
 

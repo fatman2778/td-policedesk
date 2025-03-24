@@ -18,7 +18,7 @@ TDPD.Config.Locations = {
 }
 
 -- WHAT THE POPUP TEXT CHANGES TO DURING THE COOLDOWN.
-TDPD.Config.PleaseWait = 'Assistance has been requested.'
+TDPD.Config.PleaseWait = 'Assistance has been requested. Please Wait.'
 
 -- THE TEXT DISPLAYED AT THE POLICE DESK.
 -- DEFAULT: '[~g~E~w~] Request Officer'
@@ -28,7 +28,7 @@ TDPD.Config.PopupText = '[~g~E~w~] Request Officer'
 --   GENERAL  OPTIONS   --
 --------------------------
 -- COOLDOWN PERIOD TO REQUEST ASSISTANCE AGAIN; THIS IS IN SECONDS.
-TDPD.Config.RequestCooldown = 10
+TDPD.Config.RequestCooldown = 60
 
 -- THE NOTIFICATION MESSAGE SENT TO PLAYER WHEN EMAIL IS SENT TO ON DUTY POLICE.
 -- DEFAULT: 'On duty officers have been notified of your assistance request.'
@@ -64,4 +64,4 @@ TDPD.Config.EmailMessage = 'Officer,<br/>There is an individual requesting the a
 --------------------------
 -- If you want the request to show within dispatch and MDT, define true.
 -- If you want the request to be emailed to officers, define false.
-TDPD.Config.UsingMDT = false
+TDPD.Config.UsingMDT = true

@@ -2,6 +2,17 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local cooldown = 0
 local usingThirdEye = TDPD.Config.ThirdEye
 
+lib.callback.register('td-policedesk:getStreetName', function(_, coords)
+    if not coords then
+        print('^1[td-policedesk] No coords received in callback.^0')
+        return 'Unknown Location'
+    end
+
+    local streetHash = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
+    return GetStreetNameFromHashKey(streetHash)
+end)
+
+
 RegisterNetEvent('td-policedesk:client:requestAssistance')
 AddEventHandler('td-policedesk:client:requestAssistance', function()
     QBCore.Functions.TriggerCallback('tdpd:server:getCops', function(cops)
@@ -20,6 +31,27 @@ AddEventHandler('td-policedesk:client:requestAssistance', function()
             QBCore.Functions.Notify(TDPD.Config.FailureMessage, 'error')
         end
     end)
+end)
+
+RegisterNetEvent('td-policedesk:client:sendDispatch', function(data)
+    local alert = {
+        coords = data.coords,
+        displayCode = "10-90",
+        message = "Assistance Requested - Front Desk",
+        description = string.format("Location: %s | A citizen is requesting assistance.", data.locationName or "Police Dept"),
+        name = data.callerName, -- shown in dispatch
+        callsign = "CIV",       -- optional tag to show up in dispatch list
+        priority = 2,           -- 1 = High, 2 = Medium, 3 = Low
+        recipientList = { "police" },
+        blipSprite = 60,
+        blipColour = 1,
+        blipScale = 1.2,
+        blipLength = 60,
+        blipflash = true,
+        radius = 0,
+    }
+
+    exports["ps-dispatch"]:CustomAlert(alert)
 end)
 
 CreateThread(function()

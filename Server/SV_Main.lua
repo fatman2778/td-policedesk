@@ -13,23 +13,19 @@ end)
 RegisterServerEvent('tdpd:server:requestPD')
 AddEventHandler('tdpd:server:requestPD', function(blipName)
     local src = source
+    local player = QBCore.Functions.GetPlayer(src)
+    if not player then return end
 
-    if TDPD.Config.UsingMDT then
-        local playerData = QBCore.Functions.GetPlayer(src).PlayerData
-        local callerData = playerData.charinfo.firstname .. ' ' .. playerData.charinfo.lastname
-        data = {dispatchCode = 'officerAssistance', caller = callerData, coords = GetEntityCoords(GetPlayerPed(src)), netId = NetworkGetNetworkIdFromEntity(GetPlayerPed(src)), length = 6000}
-        TriggerEvent('wf-alerts:svNotify', data)
-    else
-        for k, v in pairs(QBCore.Functions.GetQBPlayers()) do
-            if TDPD.Utils.hasJob(v.PlayerData.job.name) and v.PlayerData.job.onduty then
-                local cid = v.PlayerData.citizenid
-                TriggerEvent('qb-phone:server:sendNewMailToOffline', cid, {
-                    sender = TDPD.Config.EmailSender,
-                    subject = TDPD.Config.EmailSubject,
-                    message = TDPD.Config.EmailMessage .. blipName .. '.',
-                    button = {}
-                })
-            end
-        end
-    end
+    local playerData = player.PlayerData
+    local callerName = ("%s %s"):format(playerData.charinfo.firstname, playerData.charinfo.lastname)
+
+    local location = TDPD.Config.Locations[1]
+    local coords = location.coords
+
+    -- Move dispatch trigger to client
+    TriggerClientEvent("td-policedesk:client:sendDispatch", src, {
+        callerName = callerName,
+        locationName = location.name,
+        coords = coords
+    })
 end)
